@@ -8,3 +8,13 @@
     justify-content: space-between;
     flex-wrap: wrap;
 }
+
+@media (max-width:900px) {
+    .play-video {
+    flex-basis: 100%;
+    
+}
+.recommended {
+    flex-basis: 100%;
+}
+}

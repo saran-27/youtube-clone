@@ -8,3 +8,12 @@
 .large-container{
     margin-left: 72px; 
 }
+
+@media (max-width:900px) {
+    .large-container, .container{
+        padding-left: 2%;
+        padding-right: 2%;
+        margin-left: 0px;
+    }
+    
+}

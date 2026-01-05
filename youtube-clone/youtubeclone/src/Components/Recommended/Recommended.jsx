@@ -1,81 +1,39 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import './Recommended.css';
-import img1 from '../../assets/thumbnail1.png'
-import img2 from '../../assets/thumbnail2.png'
-import img3 from '../../assets/thumbnail3.png'
-import img4 from '../../assets/thumbnail4.png'
-import img5 from '../../assets/thumbnail5.png'
-import img6 from '../../assets/thumbnail6.png'
-import img7 from '../../assets/thumbnail7.png'
-import img8 from '../../assets/thumbnail8.png'
+import API_KEY, { Value_Converter } from '../../Data';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
-function Recommended() {
+function Recommended({categoryId}) {
+
+    const [apiData, setApiData] =useState([]);
+    
+    useEffect(() => {
+         const fetchData = async () => {
+        
+        const recommended_url = ` https://youtube.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&chart=mostPopular&maxResults=40&regionCode=US&videoCategoryId=${categoryId}&key=${API_KEY} `;
+        await fetch(recommended_url)
+            .then(res => res.json())
+            .then(data => {
+            setApiData(data.items);
+        })
+    }
+        fetchData();
+    }, []);
   return (
     <div className="recommended">
-        <div className="side-video">
-            <img src={img1} alt="thumbnail" />
+        {apiData.map((item, index) => {
+             return(
+            <Link  to={`/video/${item.snippet.categoryId}/${item.id}`} key={index} className="side-video">
+            <img src={item.snippet.thumbnails.standard.url} alt="thumbnail" />
         <div className="video-info">
-            <h4>Lorem ipsum dolor sit amet consectetur adipisicing elit.</h4>
-            <p>GreatStack</p>
-            <p>199k Views</p>
+            <h4>{item.snippet.title}</h4>
+            <p>{item.snippet.channelTitle}</p>
+            <p>{Value_Converter(item.statistics.viewCount)} Views</p>
         </div>
-        </div>
-        <div className="side-video">
-            <img src={img2} alt="thumbnail" />
-        <div className="video-info">
-            <h4>Lorem ipsum dolor sit amet consectetur adipisicing elit.</h4>
-            <p>GreatStack</p>
-            <p>199k Views</p>
-        </div>
-        </div>
-        <div className="side-video">
-            <img src={img3} alt="thumbnail" />
-        <div className="video-info">
-            <h4>Lorem ipsum dolor sit amet consectetur adipisicing elit.</h4>
-            <p>GreatStack</p>
-            <p>199k Views</p>
-        </div>
-        </div>
-        <div className="side-video">
-            <img src={img4} alt="thumbnail" />
-        <div className="video-info">
-            <h4>Lorem ipsum dolor sit amet consectetur adipisicing elit.</h4>
-            <p>GreatStack</p>
-            <p>199k Views</p>
-        </div>
-        </div>
-        <div className="side-video">
-            <img src={img5} alt="thumbnail" />
-        <div className="video-info">
-            <h4>Lorem ipsum dolor sit amet consectetur adipisicing elit.</h4>
-            <p>GreatStack</p>
-            <p>199k Views</p>
-        </div>
-        </div>
-        <div className="side-video">
-            <img src={img6} alt="thumbnail" />
-        <div className="video-info">
-            <h4>Lorem ipsum dolor sit amet consectetur adipisicing elit.</h4>
-            <p>GreatStack</p>
-            <p>199k Views</p>
-        </div>
-        </div>
-        <div className="side-video">
-            <img src={img7} alt="thumbnail" />
-        <div className="video-info">
-            <h4>Lorem ipsum dolor sit amet consectetur adipisicing elit.</h4>
-            <p>GreatStack</p>
-            <p>199k Views</p>
-        </div>
-        </div>
-        <div className="side-video">
-            <img src={img8} alt="thumbnail" />
-        <div className="video-info">
-            <h4>Lorem ipsum dolor sit amet consectetur adipisicing elit.</h4>
-            <p>GreatStack</p>
-            <p>199k Views</p>
-        </div>
-        </div>
+        </Link>
+             )
+        })}
 </div>
   )
 }
